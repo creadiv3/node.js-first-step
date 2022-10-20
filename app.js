@@ -3,6 +3,8 @@ const path = require('path');
 // const http = require('http'); --- need in case we create server without express
 const express = require('express');
 
+const errorController = require('./controller/error');
+
 //import handlebars template engine
 // const { engine } = require('express-handlebars');
 
@@ -52,16 +54,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // routing
 // we can pass first arg to filter are routes base on that
-app.use('/admin', adminRoutes.routes);
+app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
-app.use((req, res, next) => {
-  // to set satus code we use status methos. we can chain many methods to res but send must be the last one
-  // res.status(404).send('<h1>Page not found</h1>');
-
-  // res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
-  res.status(404).render('404', { pageTitle: 'Page not found' });
-});
+app.use(errorController.get404);
 
 // const server = http.createServer(app);
 // server.listen(3000);
